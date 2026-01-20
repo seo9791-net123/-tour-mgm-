@@ -13,9 +13,9 @@ export interface Product {
   transport: string;
   usageGuide: string;
   refundPolicy: string;
-  durationDays: number; // Added for filtering
-  popularity: number;   // Added for sorting
-  createdAt: string;    // Added for sorting
+  durationDays: number;
+  popularity: number;
+  createdAt: string;
 }
 
 export interface ItineraryStep {
@@ -42,6 +42,24 @@ export interface Blog {
   author: string;
   date: string;
   image: string;
+}
+
+export interface VideoItem {
+  id: string;
+  title: string;
+  url: string;
+  category: string;
+  thumbnail: string;
+}
+
+export interface Post {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  date: string;
+  category: 'REVIEW' | 'QNA' | 'TALK';
+  likes: number;
 }
 
 export interface User {

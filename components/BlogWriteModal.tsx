@@ -1,14 +1,15 @@
 
-import React, { useState, useRef } from 'react';
-import { X, PenLine, User, Type, AlignLeft, Image as ImageIcon, Send, Sparkles, Upload, ImagePlus } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, PenLine, User, Type, AlignLeft, Image as ImageIcon, Send, Sparkles, Upload, ImagePlus, Save } from 'lucide-react';
 import { Blog } from '../types';
 
 interface BlogWriteModalProps {
   onClose: () => void;
   onSave: (blog: Omit<Blog, 'id'>) => void;
+  editingBlog?: Blog;
 }
 
-const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave }) => {
+const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave, editingBlog }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     title: '',
@@ -17,6 +18,20 @@ const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave }) => {
     image: 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1470&auto=format&fit=crop'
   });
   const [isCustomImage, setIsCustomImage] = useState(false);
+
+  useEffect(() => {
+    if (editingBlog) {
+      setFormData({
+        title: editingBlog.title,
+        content: editingBlog.content,
+        author: editingBlog.author,
+        image: editingBlog.image
+      });
+      // Check if current image is one of the presets
+      const isPreset = imageOptions.some(opt => opt.url === editingBlog.image);
+      setIsCustomImage(!isPreset);
+    }
+  }, [editingBlog]);
 
   const imageOptions = [
     { label: '베트남 풍경', url: 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1470&auto=format&fit=crop' },
@@ -53,7 +68,7 @@ const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave }) => {
     }
 
     const today = new Date();
-    const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+    const dateStr = editingBlog ? editingBlog.date : `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
     
     onSave({
       ...formData,
@@ -65,14 +80,14 @@ const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave }) => {
     <div className="fixed inset-0 z-[120] bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
       <div className="w-full max-w-2xl bg-white rounded-[32px] overflow-hidden shadow-2xl animate-in zoom-in duration-300 flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="bg-emerald-600 p-6 flex items-center justify-between text-white flex-shrink-0">
+        <div className={`p-6 flex items-center justify-between text-white flex-shrink-0 transition-colors ${editingBlog ? 'bg-indigo-600' : 'bg-emerald-600'}`}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-              <PenLine className="w-6 h-6" />
+              {editingBlog ? <Save className="w-6 h-6" /> : <PenLine className="w-6 h-6" />}
             </div>
             <div>
-              <h2 className="text-xl font-black">매거진 스토리 작성</h2>
-              <p className="text-emerald-100 text-xs">당신의 소중한 베트남 여행기를 공유해주세요.</p>
+              <h2 className="text-xl font-black">{editingBlog ? '매거진 수정하기' : '매거진 스토리 작성'}</h2>
+              <p className="text-white/80 text-xs">{editingBlog ? '기존 게시물의 내용을 수정합니다.' : '당신의 소중한 베트남 여행기를 공유해주세요.'}</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-full transition-colors">
@@ -81,11 +96,11 @@ const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave }) => {
         </div>
 
         {/* Form Content */}
-        <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6 overflow-y-auto no-scrollbar flex-grow">
+        <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6 overflow-y-auto no-scrollbar flex-grow bg-gray-50/30">
           {/* Title */}
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm font-black text-gray-700">
-              <Type className="w-4 h-4 text-emerald-600" /> 제목
+              <Type className={`w-4 h-4 ${editingBlog ? 'text-indigo-600' : 'text-emerald-600'}`} /> 제목
             </label>
             <input 
               required
@@ -93,14 +108,14 @@ const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave }) => {
               placeholder="여행의 감동을 한 줄로 표현해주세요"
               value={formData.title}
               onChange={(e) => setFormData({...formData, title: e.target.value})}
-              className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all font-bold text-gray-900 shadow-inner"
+              className="w-full px-5 py-4 bg-white border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-gray-900 shadow-sm"
             />
           </div>
 
           {/* Author */}
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm font-black text-gray-700">
-              <User className="w-4 h-4 text-emerald-600" /> 작성자
+              <User className={`w-4 h-4 ${editingBlog ? 'text-indigo-600' : 'text-emerald-600'}`} /> 작성자
             </label>
             <input 
               required
@@ -108,21 +123,21 @@ const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave }) => {
               placeholder="닉네임 또는 성함"
               value={formData.author}
               onChange={(e) => setFormData({...formData, author: e.target.value})}
-              className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all font-bold text-gray-900 shadow-inner"
+              className="w-full px-5 py-4 bg-white border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-gray-900 shadow-sm"
             />
           </div>
 
           {/* Content */}
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm font-black text-gray-700">
-              <AlignLeft className="w-4 h-4 text-emerald-600" /> 본문 내용
+              <AlignLeft className={`w-4 h-4 ${editingBlog ? 'text-indigo-600' : 'text-emerald-600'}`} /> 본문 내용
             </label>
             <textarea 
               required
               placeholder="베트남에서의 특별한 경험을 자유롭게 적어주세요..."
               value={formData.content}
               onChange={(e) => setFormData({...formData, content: e.target.value})}
-              className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all min-h-[160px] font-medium text-gray-800 resize-none leading-relaxed shadow-inner"
+              className="w-full px-5 py-4 bg-white border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all min-h-[160px] font-medium text-gray-800 resize-none leading-relaxed shadow-sm"
             />
           </div>
 
@@ -130,13 +145,11 @@ const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave }) => {
           <div className="space-y-3">
             <label className="flex items-center justify-between text-sm font-black text-gray-700">
               <div className="flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-emerald-600" /> 사진 추가
+                <ImageIcon className={`w-4 h-4 ${editingBlog ? 'text-indigo-600' : 'text-emerald-600'}`} /> 사진 추가
               </div>
-              <span className="text-[10px] text-gray-400">직접 업로드하거나 테마를 선택하세요</span>
             </label>
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-              {/* Custom Upload Button */}
               <div 
                 onClick={triggerFileInput}
                 className={`relative aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all ${
@@ -156,57 +169,43 @@ const BlogWriteModal: React.FC<BlogWriteModalProps> = ({ onClose, onSave }) => {
                     <span className="text-[10px] font-bold">사진 업로드</span>
                   </>
                 )}
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  className="hidden" 
-                  accept="image/*" 
-                  onChange={handleImageUpload} 
-                />
+                <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} />
               </div>
 
-              {/* Preset Options */}
               {imageOptions.map((opt) => (
                 <button
                   key={opt.label}
                   type="button"
-                  onClick={() => {
-                    setFormData({...formData, image: opt.url});
-                    setIsCustomImage(false);
-                  }}
+                  onClick={() => { setFormData({...formData, image: opt.url}); setIsCustomImage(false); }}
                   className={`relative aspect-square rounded-2xl overflow-hidden border-4 transition-all ${
                     !isCustomImage && formData.image === opt.url ? 'border-emerald-500 scale-95 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'
                   }`}
                 >
                   <img src={opt.url} className="w-full h-full object-cover" alt={opt.label} />
-                  <div className="absolute inset-0 bg-black/20 flex items-end p-2">
-                    <span className="text-[10px] text-white font-black">{opt.label}</span>
-                  </div>
-                  {!isCustomImage && formData.image === opt.url && (
-                    <div className="absolute top-1 right-1 bg-emerald-500 text-white rounded-full p-1">
-                      <Sparkles className="w-3 h-3" />
-                    </div>
-                  )}
+                  <div className="absolute inset-0 bg-black/20 flex items-end p-2"><span className="text-[10px] text-white font-black">{opt.label}</span></div>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Footer Actions */}
-          <div className="pt-4 flex gap-4">
-            <button 
-              type="button"
-              onClick={onClose}
-              className="flex-1 py-4 bg-gray-100 text-gray-500 font-bold rounded-2xl hover:bg-gray-200 transition-colors"
-            >
-              취소
-            </button>
+          <div className="pt-4 flex gap-4 bg-gray-50/80 sticky bottom-0">
+            <button type="button" onClick={onClose} className="flex-1 py-4 bg-white border border-gray-200 text-gray-500 font-bold rounded-2xl hover:bg-gray-100 transition-colors">취소</button>
             <button 
               type="submit"
-              className="flex-[2] py-4 bg-emerald-600 text-white font-black rounded-2xl shadow-xl hover:bg-emerald-700 transition-all flex items-center justify-center gap-2 group"
+              className={`flex-[2] py-4 text-white font-black rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2 group ${editingBlog ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-emerald-600 hover:bg-emerald-700'}`}
             >
-              <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              매거진 발행하기
+              {editingBlog ? (
+                <>
+                  <Save className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  수정 내용 저장하기
+                </>
+              ) : (
+                <>
+                  <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  매거진 발행하기
+                </>
+              )}
             </button>
           </div>
         </form>
