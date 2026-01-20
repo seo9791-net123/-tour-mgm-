@@ -6,6 +6,7 @@ export interface Product {
   location: string;
   price: number;
   image: string;
+  gallery?: string[]; // 상세 페이지에서 사용할 다중 이미지
   description: string;
   inclusions: string[];
   exclusions: string[];
@@ -32,7 +33,6 @@ export type CategoryType =
   | 'BUSINESS' 
   | 'CULTURE' 
   | 'FOOD' 
-  | 'VIDEO' 
   | 'FOR_MEN';
 
 export interface Blog {
@@ -42,14 +42,6 @@ export interface Blog {
   author: string;
   date: string;
   image: string;
-}
-
-export interface VideoItem {
-  id: string;
-  title: string;
-  url: string;
-  category: string;
-  thumbnail: string;
 }
 
 export interface Post {
@@ -65,5 +57,16 @@ export interface Post {
 export interface User {
   id: string;
   name: string;
+  nickname: string;
   email: string;
+  role?: 'admin' | 'user';
+}
+
+// Added VideoItem interface to fix missing export errors in VideoSection, VideoGalleryView, and VideoWriteModal
+export interface VideoItem {
+  id: string;
+  title: string;
+  url: string;
+  thumbnail: string;
+  category: string;
 }

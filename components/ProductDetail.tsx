@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, CheckCircle2, AlertCircle, Car, Calendar, Info, CornerDownRight, Clock, MapPin, MessageCircle, ExternalLink, ShieldAlert, CreditCard } from 'lucide-react';
+import { X, CheckCircle2, AlertCircle, Car, Calendar, Info, CornerDownRight, Clock, MapPin, MessageCircle, ExternalLink, ShieldAlert, CreditCard, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../types';
 
 interface ProductDetailProps {
@@ -11,12 +11,25 @@ interface ProductDetailProps {
 
 const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onConsultation }) => {
   const [activeTab, setActiveTab] = useState<'info' | 'itinerary' | 'guide'>('info');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const gallery = product.gallery && product.gallery.length > 0 
+    ? product.gallery 
+    : [product.image];
 
   const tabs = [
     { id: 'info', label: '상품정보', icon: <Info className="w-4 h-4" /> },
     { id: 'itinerary', label: '상세일정표', icon: <Calendar className="w-4 h-4" /> },
     { id: 'guide', label: '안내/환불', icon: <AlertCircle className="w-4 h-4" /> },
   ];
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % gallery.length);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
+  };
 
   const handleConsultationClick = () => {
     onConsultation(`[${product.title}] 상품에 대한 상세 견적 및 예약 상담을 신청합니다.`);
@@ -37,10 +50,20 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onConsu
     <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center p-0 sm:p-4">
       <div className="w-full max-w-2xl bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden max-h-[95vh] flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-300">
         
-        {/* Header Image */}
-        <div className="relative h-64 flex-shrink-0">
-          <img src={product.image} className="w-full h-full object-cover" alt="" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+        {/* Carousel Header Image Area */}
+        <div className="relative h-72 sm:h-80 flex-shrink-0 group">
+          {/* Main Image with Transition */}
+          <div className="w-full h-full overflow-hidden">
+             <img 
+              key={currentImageIndex}
+              src={gallery[currentImageIndex]} 
+              className="w-full h-full object-cover animate-in fade-in duration-500" 
+              alt={`${product.title} ${currentImageIndex + 1}`} 
+            />
+          </div>
+
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 flex flex-col justify-end p-6">
             <div className="bg-emerald-500/90 self-start text-white text-[10px] font-black px-2 py-1 rounded-md mb-2 uppercase tracking-widest">
               Premium Package
             </div>
@@ -50,9 +73,44 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onConsu
               <span>{product.location} 프리미엄 투어</span>
             </div>
           </div>
+
+          {/* Navigation Controls (Only if gallery has more than 1 image) */}
+          {gallery.length > 1 && (
+            <>
+              <button 
+                onClick={handlePrevImage}
+                className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button 
+                onClick={handleNextImage}
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+              
+              {/* Image Indicators */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {gallery.map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`w-1.5 h-1.5 rounded-full transition-all ${currentImageIndex === idx ? 'bg-emerald-500 w-4' : 'bg-white/50'}`}
+                  ></div>
+                ))}
+              </div>
+
+              {/* Counter Badge */}
+              <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md text-white text-[10px] font-black px-2.5 py-1 rounded-full border border-white/10">
+                {currentImageIndex + 1} / {gallery.length}
+              </div>
+            </>
+          )}
+
+          {/* Close Button */}
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 rounded-full text-white backdrop-blur-md transition-colors"
+            className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 rounded-full text-white backdrop-blur-md transition-colors z-20"
           >
             <X className="w-6 h-6" />
           </button>

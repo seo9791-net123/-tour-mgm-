@@ -46,7 +46,7 @@ const QuotationView: React.FC<QuotationViewProps> = ({ data, onClose }) => {
     const textToCopy = `
 [TOUR MGM 프리미엄 견적서]
 발행일: ${dateStr}
-문의 담당: vnseen (Kakao)
+문의 담당: vnseen1 (Kakao)
 
 ■ 예약자 정보
 - 성함: ${data.reservor.name}
@@ -64,7 +64,7 @@ ${itineraryText}
 
 ■ 안내 사항
 - 본 견적서는 현지 사정 및 예약 시점에 따라 변동될 수 있습니다.
-- 카카오톡 ID 'vnseen'으로 문의하시면 즉시 예약을 도와드립니다.
+- 카카오톡 ID 'vnseen1'으로 문의하시면 즉시 예약을 도와드립니다.
     `.trim();
 
     try {
@@ -123,7 +123,7 @@ ${itineraryText}
             <div className="text-right text-xs text-slate-400 space-y-1 sm:mt-4">
               <p className="font-medium tracking-wider">문서번호: MGM-QT-{today.getTime().toString().slice(-6)}</p>
               <p className="font-medium tracking-wider">발행일자: {dateStr}</p>
-              <p className="text-slate-600 font-black mt-2">담당 플래너: vnseen (KakaoTalk)</p>
+              <p className="text-slate-600 font-black mt-2">담당 플래너: vnseen1 (KakaoTalk)</p>
             </div>
           </div>
 

@@ -21,7 +21,7 @@ const KakaoConsultationModal: React.FC<KakaoConsultationModalProps> = ({ onClose
     if (onFinalSubmit) {
       onFinalSubmit(formData);
     } else {
-      alert(`성함: ${formData.name}\n연락처: ${formData.phone}\n견적서 정보가 복사되었습니다. 카카오톡 채팅방(ID: vnseen)에 붙여넣기 해주세요.`);
+      alert(`성함: ${formData.name}\n연락처: ${formData.phone}\n견적서 정보가 복사되었습니다. 카카오톡 채팅방(ID: vnseen1)에 붙여넣기 해주세요.`);
       onClose();
     }
   };
@@ -39,7 +39,7 @@ const KakaoConsultationModal: React.FC<KakaoConsultationModalProps> = ({ onClose
             <div>
               <h2 className="text-white text-xl font-bold">카카오톡 예약 문의</h2>
               <p className="text-gray-400 text-sm mt-0.5">
-                카카오톡 ID: <span className="text-[#fee500] font-bold tracking-wider">vnseen</span>
+                카카오톡 ID: <span className="text-[#fee500] font-bold tracking-wider">vnseen1</span>
               </p>
             </div>
           </div>
@@ -118,7 +118,7 @@ const KakaoConsultationModal: React.FC<KakaoConsultationModalProps> = ({ onClose
             </h4>
             <p className="text-[#856404] text-xs leading-relaxed">
               버튼을 누르면 <span className="font-bold">견적서 상세 정보가 생성</span>됩니다.<br />
-              카카오톡 <span className="font-bold">vnseen</span>으로 문의하시면 즉시 연결됩니다.
+              카카오톡 <span className="font-bold">vnseen1</span>으로 문의하시면 즉시 연결됩니다.
             </p>
           </div>
 

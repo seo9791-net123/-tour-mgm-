@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { CategoryType, Product, Blog, Post, VideoItem } from './types';
 
 export const CATEGORIES = [
@@ -40,18 +39,38 @@ export const CATEGORIES = [
     url: 'https://mg420.my.canva.site/foods-m'
   },
   { 
-    id: 'VIDEO' as CategoryType, 
-    label: '동영상', 
-    image: 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?q=80&w=400&auto=format&fit=crop',
-    url: null 
-  },
-  { 
     id: 'FOR_MEN' as CategoryType, 
     label: 'FOR MEN', 
-    image: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&q=80&w=200',
+    image: 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=200',
     url: 'https://mg420.my.canva.site/for-men-m'
   },
 ];
+
+export const MOCK_VIDEOS: VideoItem[] = [
+  {
+    id: 'v1',
+    title: '호치민 탄손넛 CC 라운딩 현장 스케치',
+    url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    thumbnail: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?q=80&w=800&auto=format&fit=crop',
+    category: 'GOLF'
+  },
+  {
+    id: 'v2',
+    title: '붕따우 더 블러프 CC 링크스 코스 전경',
+    url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    thumbnail: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?q=80&w=800&auto=format&fit=crop',
+    category: 'TOUR'
+  },
+  {
+    id: 'v3',
+    title: 'MGM 프라이빗 풀빌라 내부 투어',
+    url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    thumbnail: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=800&auto=format&fit=crop',
+    category: 'HOTEL'
+  }
+];
+
+const TRANSPORT_GUIDE = "인원별 맞춤형 7인승 / 16인승 / 26인승 고급 리무진 버스 제공 (전용 기사, 유류비, 통행료 포함)";
 
 export const MOCK_PRODUCTS: Product[] = [
   {
@@ -61,21 +80,239 @@ export const MOCK_PRODUCTS: Product[] = [
     location: 'Ho Chi Minh',
     price: 890000,
     image: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?q=80&w=1470&auto=format&fit=crop',
-    description: '호치민 최고의 명문 골프장(탄손넛, 트윈도브스, 롱탄)을 순회하는 프리미엄 3박 5일 코스입니다.',
-    inclusions: ['전 일정 5성급 호텔 숙박', '그린피/캐디피/카트 포함', '전용 리무진 차량', '현지 가이드'],
-    exclusions: ['왕복 항공권', '캐디팁', '개인 비용'],
-    transport: '29인승 최신형 리무진 버스',
-    usageGuide: '티업 40분 전 도착 필수',
+    gallery: [
+      'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?q=80&w=1470&auto=format&fit=crop'
+    ],
+    description: '호치민 최고의 명문 골프장(탄손넛, 트윈도브스, 롱탄)을 순회하며 도심의 럭셔리를 만끽하는 패키지입니다.',
+    inclusions: ['호텔 숙박', '그린피/캐디피/카트 포함', '7/16/26인승 고급 리무진 버스', '전 일정 조식 포함'],
+    exclusions: ['왕복 항공권', '캐디팁', '점심 및 저녁 식사', '개인 비용'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: '티업 40분 전 도착 필수. 복장 규정 준수.',
     refundPolicy: '21일 전 취소 시 100% 환불',
     durationDays: 5,
     popularity: 98,
     createdAt: '2024-01-01',
     itinerary: [
-      { day: 1, title: '호치민 도착', description: '가이드 미팅 및 호텔 이동' },
-      { day: 2, title: '탄손넛 CC 라운딩', description: '도심 속 명문 코스 라운딩' },
-      { day: 3, title: '트윈도브스 CC 라운딩', description: 'KLPGA 개최 명문 코스' },
-      { day: 4, title: '롱탄 CC 라운딩 후 출국', description: '베트남 최고 경관 코스' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
+      { day: 1, title: '호치민 공항 미팅 및 호텔 체크인', description: '탄손넛 국제공항 가이드 미팅 후 전용 리무진 이동. 럭셔리 호텔 체크인 후 자유 시간.' },
+      { day: 2, title: '탄손넛 CC 라운딩 및 시내 관광', description: '오전: 탄손넛 CC 18홀 라운딩. 오후: 통일궁, 노트르담 성당 등 호치민 주요 명소 관광.' },
+      { day: 3, title: '트윈도브스 CC 라운딩 및 야경 투어', description: '오전: 국제 표준 코스 트윈도브스 CC 라운딩. 오후: 사이공 강 유람선 또는 루프탑 바 야경 투어.' },
+      { day: 4, title: '롱탄 CC 라운딩 및 공항 샌딩', description: '오전: 롱탄 CC 라운딩. 오후: 벤탄 시장 쇼핑 및 발마사지 체험 후 공항으로 이동.' },
+      { day: 5, title: '한국 공항 도착', description: '인천/부산 공항 도착 및 여행 종료.' }
+    ]
+  },
+  {
+    id: '10',
+    category: 'GOLF',
+    title: '[4박 5일] 호치민 근교 명문 3색 골프 (정산, 롱탄, 탄손넛)',
+    location: 'Ho Chi Minh',
+    price: 1050000,
+    image: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?q=80&w=1470&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?q=80&w=1470&auto=format&fit=crop'
+    ],
+    description: '한국인 골퍼들이 가장 선호하는 정산 CC와 롱탄 CC를 포함한 호치민 최고의 가성비 & 퀄리티 패키지입니다.',
+    inclusions: ['호텔 숙박', '그린피/캐디피/카트 3회', '전용 리무진 차량 서비스', '한국어 가이드 의전'],
+    exclusions: ['왕복 항공권', '중/석식', '캐디팁 (약 $15/18홀)', '매너팁'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: '정산 CC는 보트 이동 시간이 포함되니 미팅 시간을 엄수해 주세요.',
+    refundPolicy: '14일 전 취소 시 50% 환불, 7일 전 환불 불가',
+    durationDays: 5,
+    popularity: 95,
+    createdAt: '2024-06-01',
+    itinerary: [
+      { day: 1, title: '호치민 도착 및 호텔 체크인', description: '탄손넛 국제공항 도착 후 가이드 피켓 미팅. 전용 리무진으로 시내 4성급 호텔 이동 후 휴식 및 자유 일정.' },
+      { day: 2, title: '정산 CC 18홀 라운딩 (보트 이동)', description: '오전: 호텔 조식 후 선착장으로 이동. 전용 보트를 타고 대나이 섬 내 정산 CC 입장 및 라운딩. 오후: 라운딩 후 호텔 복귀 및 1군 중심가 자유 시간.' },
+      { day: 3, title: '롱탄 CC 18홀 라운딩', description: '오전: 베트남 최고의 조경을 자랑하는 롱탄 CC 라운딩. 오후: 사이공 스퀘어 쇼핑 투어 및 90분 전신 마사지 체험.' },
+      { day: 4, title: '탄손넛 CC 18홀 라운딩 후 공항 이동', description: '오전: 호텔 체크아웃 후 시내 중심 탄손넛 CC 라운딩. 오후: 한식 특식 후 카페 투어 및 쇼핑 센터 방문. 저녁: 공항으로 이동 및 출국 수속.' },
+      { day: 5, title: '한국 도착', description: '인천/부산 도착 및 여행 종료.' }
+    ]
+  },
+  {
+    id: '11',
+    category: 'GOLF',
+    title: '[3박 4일] 호치민 레이디스 럭셔리 골프 & 스파',
+    location: 'Ho Chi Minh',
+    price: 820000,
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1470&auto=format&fit=crop',
+    description: '여성 골퍼들을 위한 세심한 일정. 최고급 스파와 애프터눈 티, 그리고 아름다운 조경의 트윈도브스 CC 라운딩.',
+    inclusions: ['호텔 숙박', '트윈도브스 CC 18홀 라운딩 2회', '프리미엄 전신 스파 90분 2회', '고급 호텔 애프터눈 티 세트'],
+    exclusions: ['항공권', '중/석식', '캐디팁', '개인 비용'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: '스파 예약 시간을 위해 라운딩 후 가이드 안내를 따라주세요. 복장 규정은 스마트 캐주얼입니다.',
+    refundPolicy: '20일 전 전액 환불',
+    durationDays: 4,
+    popularity: 90,
+    createdAt: '2024-06-05',
+    itinerary: [
+      { day: 1, title: '호치민 입국 및 웰컴 디너', description: '공항 영접 후 5성급 호텔 체크인. 저녁: 사이공 강변 럭셔리 프랑스 레스토랑에서 웰컴 디너.' },
+      { day: 2, title: '트윈도브스 CC 라운딩 & 애프터눈 티', description: '오전: 트윈도브스 CC 18홀 라운딩. 오후: 호텔 복귀 후 수영장 휴식 또는 5성급 호텔 라운지 애프터눈 티 세트 즐기기.' },
+      { day: 3, title: '시내 쇼핑 투어 및 프리미엄 스파', description: '오전: 유니온 스퀘어, 다카시마야 백화점 등 명품 쇼핑 투어. 오후: 90분 프리미엄 아로마 스파 체험 및 1군 카페 거리 방문.' },
+      { day: 4, title: '브런치 후 공항 이동', description: '오전: 호텔 내 뷔페 조식 후 여유로운 체크아웃. 오후: 마지막 쌀국수 맛집 방문 후 공항 샌딩.' }
+    ]
+  },
+  {
+    id: '12',
+    category: 'GOLF',
+    title: '[4박 6일] 호치민 올인원 무제한 골프 (송베 CC)',
+    location: 'Binh Duong',
+    price: 1180000,
+    image: 'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?q=80&w=1470&auto=format&fit=crop',
+    description: '이동 시간을 최소화하고 라운딩에 집중하고 싶은 열혈 골퍼를 위한 송베 CC 스테이 앤 플레이 상품입니다.',
+    inclusions: ['호텔 숙박', '매일 27홀~36홀 무제한 라운딩', '리조트 내 전 일정 식사 포함', '공항 왕복 셔틀'],
+    exclusions: ['항공권', '캐디팁', '음료 및 주류'],
+    transport: "공항-골프 리조트 전용 프라이빗 셔틀",
+    usageGuide: '무제한 라운딩은 현지 티업 현황에 따라 유동적으로 운영되며, 사전에 티타임을 지정해야 합니다.',
+    refundPolicy: '15일 전 취소 시 70% 환불',
+    durationDays: 6,
+    popularity: 87,
+    createdAt: '2024-06-10',
+    itinerary: [
+      { day: 1, title: '호치민 도착 및 송베 이동', description: '공항 도착 후 송베 전용 차량으로 리조트 이동 (약 40분). 리조트 체크인 후 석식 및 휴식.' },
+      { day: 2, title: '송베 CC 27홀 집중 라운딩', description: '오전/오후: 송베 CC의 3개 코스(사막, 팜, 오션)를 넘나들며 즐기는 27홀 집중 라운딩.' },
+      { day: 3, title: '송베 CC 27홀 집중 라운딩', description: '어제의 부족했던 홀을 공략하는 무제한 라운딩 서비스.' },
+      { day: 4, title: '송베 CC 27홀 집중 라운딩 및 석식', description: '라운딩 후 리조트 내 마사지(추가 비용) 또는 수영장 이용.' },
+      { day: 5, title: '오전 라운딩 후 공항 샌딩', description: '오전: 마지막 18홀 라운딩 및 체크아웃. 오후: 호치민 시내 잠시 경유 후 공항으로 이동.' },
+      { day: 6, title: '한국 도착', description: '이른 아침 한국 공항 도착 및 여행 종료.' }
+    ]
+  },
+  {
+    id: '13',
+    category: 'GOLF',
+    title: '[3박 5일] 호치민 직장인 주말 특급 (야간 라운딩 포함)',
+    location: 'Ho Chi Minh',
+    price: 790000,
+    image: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1470&auto=format&fit=crop',
+    description: '목요일 밤 출발! 연차 1일로 즐기는 호치민 도심형 골프 투어. 탄손넛 야간 라운딩의 묘미를 느껴보세요.',
+    inclusions: ['호텔 숙박', '탄손넛 야간 1회 + 주간 2회 라운딩', '전 일정 전용 리무진'],
+    exclusions: ['항공권', '식사 비용', '캐디팁'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: '야간 라운딩은 화려한 조명 아래 진행되어 시원하고 쾌적합니다. 모기가 있을 수 있으니 패치를 준비하세요.',
+    refundPolicy: '10일 전 취소 시 환불 불가',
+    durationDays: 5,
+    popularity: 92,
+    createdAt: '2024-06-15',
+    itinerary: [
+      { day: 1, title: '목요일 밤 호치민 도착', description: '밤 비행기 이용, 탄손넛 공항 입국 및 호텔 체크인(새벽).' },
+      { day: 2, title: '오전 자유 휴식 및 야간 라운딩', description: '오전: 늦잠 및 호텔 수영장 휴식. 오후 3시: 탄손넛 CC 이동 및 석양과 함께 시작하는 18홀 야간 라운딩.' },
+      { day: 3, title: '롱탄 CC 주간 라운딩', description: '오전: 롱탄 CC 라운딩. 오후: 라운딩 후 시내 마사지 샵 및 로컬 맥주 거리 투어.' },
+      { day: 4, title: '오전 정산 CC 라운딩 및 샌딩', description: '오전: 정산 CC 라운딩 후 체크아웃. 오후: 롯데마트 쇼핑 및 이른 석식 후 공항 샌딩.' },
+      { day: 5, title: '월요일 아침 한국 도착', description: '한국 도착 후 바로 출근 가능한 스케줄.' }
+    ]
+  },
+  {
+    id: '14',
+    category: 'GOLF',
+    title: '[5박 7일] 베트남 남부 원정 골프 (호치민+붕따우)',
+    location: 'Ho Chi Minh & Vung Tau',
+    price: 1450000,
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1473&auto=format&fit=crop',
+    description: '호치민의 도심 골프와 붕따우의 환상적인 오션뷰 링크스 코스(더 블러프)를 동시에 경험하는 원정 패키지입니다.',
+    inclusions: ['호텔 숙박', '더 블러프 포함 총 4회 라운딩', '도시 간 이동 리무진 서비스', '해산물 특식 1회'],
+    exclusions: ['항공권', '중/석식', '캐디팁', '관광지 입장료'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: '붕따우 더 블러프 CC는 바람이 매우 강하므로 여분의 골프공을 넉넉히 준비하시는 것을 권장합니다.',
+    refundPolicy: '30일 전 100% 환불',
+    durationDays: 7,
+    popularity: 97,
+    createdAt: '2024-06-20',
+    itinerary: [
+      { day: 1, title: '호치민 도착 및 붕따우 이동', description: '공항 가이드 영접 후 즉시 붕따우 해변 도시로 이동 (약 2시간). 붕따우 리조트 체크인.' },
+      { day: 2, title: '더 블러프 CC 라운딩 (세계 100대 코스)', description: '전 일정의 하이라이트. 그렉 노먼 설계의 링크스 코스 더 블러프에서 18홀 라운딩. 저녁: 붕따우 해산물 특식.' },
+      { day: 3, title: '붕따우 파라다이스 CC 라운딩', description: '오전: 해변을 끼고 있는 파라다이스 CC 라운딩. 오후: 거대 예수상 관광 또는 리조트 수영장 휴식.' },
+      { day: 4, title: '호치민 복귀 및 트윈도브스 라운딩', description: '오전: 붕따우 체크아웃 및 호치민 이동. 오후: 트윈도브스 CC 라운딩 및 시내 호텔 체크인.' },
+      { day: 5, title: '정산 CC 라운딩 및 시내 투어', description: '오전: 사이공 강 위 보트로 정산 CC 이동 및 라운딩. 오후: 호치민 시내 핫플레이스 투어.' },
+      { day: 6, title: '오전 자유 시간 및 공항 샌딩', description: '오전: 벤탄시장 기념품 쇼핑 및 현지 카페 이용. 오후: 전신 마사지 후 공항으로 이동 및 출국.' },
+      { day: 7, title: '한국 도착', description: '여행 종료.' }
+    ]
+  },
+  {
+    id: '5',
+    category: 'GOLF',
+    title: '[3박 5일] 무이네 해변 라운딩 & 지프 사막 투어',
+    location: 'Mui Ne',
+    price: 950000,
+    image: 'https://images.unsplash.com/photo-1506126279646-a697353d3166?q=80&w=1470&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1506126279646-a697353d3166?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1470&auto=format&fit=crop'
+    ],
+    description: '환상적인 해안 코스인 씨링크 CC 라운딩과 화이트 샌드듄 지프 투어가 포함된 액티브 패키지입니다.',
+    inclusions: ['호텔 숙박', '그린피/캐디피/카트 포함', '7/16/26인승 고급 리무진 버스', '조식 포함', '지프 사막 투어 비용'],
+    exclusions: ['항공권', '캐디팁', '점심 및 저녁 식사'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: '사막 투어 시 선글라스 필수. 씨링크 CC는 링크스 코스로 바람 대비 필요.',
+    refundPolicy: '21일 전 취소 시 전액 환불',
+    durationDays: 5,
+    popularity: 94,
+    createdAt: '2024-05-10',
+    itinerary: [
+      { day: 1, title: '호치민 도착 및 무이네 이동', description: '공항 가이드 미팅 후 고급 리무진 버스 탑승. 무이네 해변 리조트로 이동(약 2시간 30분). 체크인 후 휴식.' },
+      { day: 2, title: '씨링크 CC 라운딩 및 리조트 휴양', description: '오전: 씨링크 CC 18홀 라운딩. 오후: 리조트 내 프라이빗 비치 및 수영장 자유 시간.' },
+      { day: 3, title: '지프 투어 및 씨링크 CC 라운딩', description: '새벽: 화이트 샌드듄 일출 감상 지프 투어. 오전: 조식 후 씨링크 CC 2회차 라운딩. 오후: 요정의 샘물 산책.' },
+      { day: 4, title: '무이네 시내 관광 및 호치민 복귀', description: '오전: 와인캐슬 방문 및 기념품 쇼핑. 오후: 리무진 버스로 호치민 복귀 및 공항 이동.' },
+      { day: 5, title: '한국 공항 도착', description: '여행 종료.' }
+    ]
+  },
+  {
+    id: '6',
+    category: 'GOLF',
+    title: '[3박 5일] 달랏 영원한 봄의 도시 시원한 3색 골프',
+    location: 'Da Lat',
+    price: 990000,
+    image: 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1470&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1470&auto=format&fit=crop'
+    ],
+    description: '연중 18-24도의 시원한 날씨! 베트남의 스위스 달랏에서 즐기는 최고의 명문 코스 투어입니다.',
+    inclusions: ['호텔 숙박', '그린피/캐디피/카트 포함', '7/16/26인승 고급 리무진 버스', '조식 포함'],
+    exclusions: ['항공권', '점심 및 저녁 식사', '캐디팁'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: '고산 지대로 얇은 바람막이 필수. 달랏 팰리스 CC는 전통적인 코스 레이아웃.',
+    refundPolicy: '15일 전 취소 시 수수료 발생',
+    durationDays: 5,
+    popularity: 96,
+    createdAt: '2024-05-12',
+    itinerary: [
+      { day: 1, title: '달랏 공항 미팅 및 숙소 이동', description: '달랏 공항 가이드 미팅 후 호텔 체크인 및 휴식.' },
+      { day: 2, title: '달랏 1200 CC 라운딩 및 야시장', description: '오전: 상쾌한 고원 공기의 달랏 1200 CC 라운딩. 저녁: 달랏 야시장 투어.' },
+      { day: 3, title: 'SAM 뚜옌람 CC 라운딩 및 호수 휴양', description: '오전: SAM 뚜옌람 CC 라운딩. 오후: 죽림 선원 관광 및 케이블카 탑승.' },
+      { day: 4, title: '달랏 팰리스 CC 라운딩 및 복귀 준비', description: '오전: 정통 코스 달랏 팰리스 CC 라운딩. 오후: 전신 스파 및 공항 샌딩.' },
+      { day: 5, title: '한국 공항 도착', description: '여행 종료.' }
+    ]
+  },
+  {
+    id: '7',
+    category: 'GOLF',
+    title: '[3박 5일] 호치민 VIP 황제 골프 & 프라이빗 풀빌라',
+    location: 'Ho Chi Minh',
+    price: 1250000,
+    image: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=1470&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=1470',
+      'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?q=80&w=1470&auto=format&fit=crop'
+    ],
+    description: '오직 우리 팀만을 위한 프라이빗 풀빌라와 호치민 최고 명문 골프장 라운딩이 결합된 VIP 패키지입니다.',
+    inclusions: ['호텔 숙박', '명문 CC 3회 라운딩', '전용 리무진 버스', '조식 포함'],
+    exclusions: ['항공권', '캐디팁', '점심 및 저녁 식사'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: 'VIP 의전 서비스 포함. 풀빌라 내 셰프 초빙 서비스 가능(사전 예약).',
+    refundPolicy: '30일 전 취소 시 전액 환불',
+    durationDays: 5,
+    popularity: 99,
+    createdAt: '2024-05-15',
+    itinerary: [
+      { day: 1, title: 'VIP 의전 입국 및 빌라 체크인', description: '공항 도착 즉시 VIP 가이드 영접 및 프라이빗 풀빌라 이동.' },
+      { day: 2, title: '트윈도브스 CC 라운딩 및 빌라 휴식', description: '오전: 트윈도브스 CC 라운딩. 오후: 풀빌라 내 전용 수영장 휴양.' },
+      { day: 3, title: '롱탄 CC 라운딩 및 야경 감상', description: '오전: 롱탄 CC 라운딩. 오후: 랜드마크 81 관람 및 스파 투어.' },
+      { day: 4, title: '탄손넛 CC 라운딩 및 공항 이동', description: '오전: 탄손넛 CC 라운딩. 저녁: 마지막 쇼핑 및 공항 이동.' },
+      { day: 5, title: '한국 공항 도착', description: '여행 종료.' }
     ]
   },
   {
@@ -85,45 +322,26 @@ export const MOCK_PRODUCTS: Product[] = [
     location: 'Vung Tau',
     price: 750000,
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1473&auto=format&fit=crop',
+    gallery: [
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1473&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1470&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1520116468816-95b69f847357?q=80&w=1470&auto=format&fit=crop'
+    ],
     description: '해변의 도시 붕따우에서 즐기는 파도 소리와 함께하는 시원한 라운딩 패키지입니다.',
-    inclusions: ['리조트 3박', '라운딩 3회', '전용 리무진', '조식 포함'],
-    exclusions: ['항공권', '캐디팁', '석식'],
-    transport: '최신형 리무진 버스',
-    usageGuide: '바람막이 지참 권장',
-    refundPolicy: '14일 전 취소 시 50% 환불',
+    inclusions: ['호텔 숙박', '그린피/캐디피/카트 포함', '전용 리무진 버스', '조식 포함'],
+    exclusions: ['항공권', '캐디팁', '점심 및 저녁 식사'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: '바람막이 지참 권장. 더 블러프 CC는 강한 바람이 변수.',
+    refundPolicy: '14일 전 취소 시 수수료 발생',
     durationDays: 5,
     popularity: 92,
     createdAt: '2024-02-15',
     itinerary: [
-      { day: 1, title: '붕따우 이동', description: '리무진으로 해변 도시 이동' },
-      { day: 2, title: '더 블러프 라운딩', description: '세계 100대 골프장' },
-      { day: 3, title: '파라다이스 CC 라운딩', description: '해안가 힐링 라운딩' },
-      { day: 4, title: '자유시간 및 출국', description: '시내 투어 후 공항 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  },
-  {
-    id: '3',
-    category: 'HOTEL',
-    title: '[3박 5일] 호치민 풀빌라 프라이빗 파티 & 스테이',
-    location: 'Ho Chi Minh',
-    price: 680000,
-    image: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=1470&auto=format&fit=crop',
-    description: '대형 럭셔리 풀빌라에서 우리만의 프라이빗한 휴식과 파티를 즐기는 패키지입니다.',
-    inclusions: ['4베드룸 풀빌라 3박', 'BBQ 파티 1회', '전용 차량', '가사 서비스'],
-    exclusions: ['개인 용돈', '관광지 입장료'],
-    transport: '16인승 럭셔리 리무진',
-    usageGuide: '빌라 내 파티 가능',
-    refundPolicy: '21일 전 100% 환불',
-    durationDays: 5,
-    popularity: 95,
-    createdAt: '2024-03-01',
-    itinerary: [
-      { day: 1, title: '빌라 입성', description: '공항 픽업 및 체크인' },
-      { day: 2, title: '자유 휴식', description: '수영장 및 프라이빗 휴식' },
-      { day: 3, title: 'BBQ 나이트', description: '풀사이드 바베큐 파티' },
-      { day: 4, title: '쇼핑 및 샌딩', description: '벤탄시장 관광 후 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
+      { day: 1, title: '호치민 도착 및 붕따우 이동', description: '공항 영접 후 붕따우 해변 리조트 이동.' },
+      { day: 2, title: '더 블러프 라운딩 및 해안도로 관광', description: '오전: 더 블러프 CC 라운딩. 오후: 예수상 및 해안도로 드라이브.' },
+      { day: 3, title: '파라다이스 CC 라운딩 및 야경', description: '오전: 붕따우 파라다이스 CC 라운딩. 오후: 호마이 파크 야경 감상.' },
+      { day: 4, title: '호치민 경유 공항 이동', description: '오전: 호치민 이동 시내 쇼핑. 저녁: 공항 이동.' },
+      { day: 5, title: '한국 공항 도착', description: '여행 종료.' }
     ]
   },
   {
@@ -133,262 +351,22 @@ export const MOCK_PRODUCTS: Product[] = [
     location: 'Ho Chi Minh',
     price: 620000,
     image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1470&auto=format&fit=crop',
-    description: '호치민 1군 중심가 5성급 호텔에서 즐기는 세련된 도시 휴양과 쇼핑 패키지입니다.',
-    inclusions: ['5성급 호텔 3박', '조식 포함', '백화점 쇼핑 가이드', '라운지 이용권'],
-    exclusions: ['항공권', '개인 쇼핑 비용'],
-    transport: '전용 세단 서비스',
-    usageGuide: '쇼핑 동선 맞춤형 조정 가능',
+    description: '호치민 1군 중심가 호텔에서 즐기는 세련된 도시 휴양과 쇼핑 패키지입니다.',
+    inclusions: ['호텔 숙박', '조식 포함', '전용 리무진 버스', '쇼핑 가이드'],
+    exclusions: ['항공권', '식사 비용', '개인 쇼핑 비용'],
+    transport: TRANSPORT_GUIDE,
+    usageGuide: '쇼핑 동선 맞춤형 조정 가능.',
     refundPolicy: '7일 전 취소 시 30% 수수료',
     durationDays: 5,
     popularity: 88,
     createdAt: '2024-04-01',
     itinerary: [
-      { day: 1, title: '호텔 체크인', description: '1군 럭셔리 호텔 입성' },
-      { day: 2, title: '명품관 쇼핑', description: '유니온 스퀘어 및 다카시마야 투어' },
-      { day: 3, title: '루프탑 다이닝', description: '야경과 함께하는 디너' },
-      { day: 4, title: '스파 및 마무리', description: '전신 마사지 후 공항 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
+      { day: 1, title: '호텔 체크인', description: '1군 럭셔리 호텔 체크인 후 자유 시간.' },
+      { day: 2, title: '명품 쇼핑 투어', description: '다카시마야 및 유니온 스퀘어 쇼핑 가이드.' },
+      { day: 3, title: '자유 일정 및 다이닝', description: '호텔 수영장 이용 및 개별 다이닝 투어.' },
+      { day: 4, title: '스파 및 공항 샌딩', description: '체크아웃 후 최고급 스파 체험 및 공항 이동.' },
+      { day: 5, title: '한국 도착', description: '여행 종료.' }
     ]
-  },
-  {
-    id: '5',
-    category: 'CULTURE',
-    title: '[3박 5일] 호치민 정통 마사지 & 테라피 힐링 패키지',
-    location: 'Ho Chi Minh',
-    price: 550000,
-    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1470&auto=format&fit=crop',
-    description: '지친 몸과 마음을 달래주는 프리미엄 스파와 베트남 정통 테라피 집중 힐링 투어입니다.',
-    inclusions: ['부티크 호텔 3박', '1일 1회 프리미엄 스파', '채식 건강식 2회', '전용 리무진'],
-    exclusions: ['가이드 팁', '추가 마사지 옵션'],
-    transport: '쾌적한 리무진 차량',
-    usageGuide: '임산부 사전 고지 필수',
-    refundPolicy: '10일 전 100% 환불',
-    durationDays: 5,
-    popularity: 91,
-    createdAt: '2024-04-02',
-    itinerary: [
-      { day: 1, title: '테라피 시작', description: '아로마 웰컴 마사지' },
-      { day: 2, title: '핫스톤 집중 케어', description: '전신 피로 회복 투어' },
-      { day: 3, title: '명상 및 요가', description: '심신 안정을 위한 클래스' },
-      { day: 4, title: '허브 스파 및 샌딩', description: '전통 약초 스파 후 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  },
-  {
-    id: '6',
-    category: 'CULTURE',
-    title: '[3박 5일] 베트남 전통 문화 & 미식 탐방 투어',
-    location: 'Ho Chi Minh',
-    price: 520000,
-    image: 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1470&auto=format&fit=crop',
-    description: '베트남의 숨겨진 문화와 진짜 맛을 찾아서! 쿠킹클래스가 포함된 감성 투어입니다.',
-    inclusions: ['전통 스타일 호텔 3박', '미슐랭 맛집 탐방', '쿠킹클래스 체험', '전용 리무진'],
-    exclusions: ['개인 음료', '매너팁'],
-    transport: '리무진 차량',
-    usageGuide: '편한 복장 권장',
-    refundPolicy: '14일 전 100% 환불',
-    durationDays: 5,
-    popularity: 89,
-    createdAt: '2024-03-12',
-    itinerary: [
-      { day: 1, title: '문화 탐방', description: '역사 박물관 관람' },
-      { day: 2, title: '미식 로드', description: '로컬 맛집 투어' },
-      { day: 3, title: '쿠킹 클래스', description: '전통 요리 직접 만들기' },
-      { day: 4, title: '공연 관람 및 출국', description: '아오쇼 관람 후 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  },
-  {
-    id: '7',
-    category: 'FOOD',
-    title: '[3박 5일] 호치민 리얼 스트릿 푸드 & 커피 로드',
-    location: 'Ho Chi Minh',
-    price: 480000,
-    image: 'https://images.unsplash.com/photo-1552611052-33e04de081de?q=80&w=1470&auto=format&fit=crop',
-    description: '카페 쓰어다부터 반미, 쌀국수까지 호치민 먹거리 완전 정복 패키지입니다.',
-    inclusions: ['부티크 호텔 3박', '식비 쿠폰 제공', '커피 투어 가이드', '전용 차량'],
-    exclusions: ['주류 비용', '추가 간식'],
-    transport: '푸드 트립 전용 차량',
-    usageGuide: '식욕 장착 필수',
-    refundPolicy: '10일 전 100% 환불',
-    durationDays: 5,
-    popularity: 91,
-    createdAt: '2024-03-14',
-    itinerary: [
-      { day: 1, title: '커피 로드', description: '유명 카페 투어' },
-      { day: 2, title: '쌀국수 정복', description: '종류별 쌀국수 탐방' },
-      { day: 3, title: '스트릿 푸드 나이트', description: '야시장 먹거리 체험' },
-      { day: 4, title: '디저트 및 샌딩', description: '반미 맛집 후 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  },
-  {
-    id: '8',
-    category: 'FOR_MEN',
-    title: '[3박 5일] 호치민 VIP 황제 투어 & 럭셔리 나이트',
-    location: 'Ho Chi Minh',
-    price: 1200000,
-    image: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1470&auto=format&fit=crop',
-    description: '당신만을 위한 최고의 밤과 휴식. VIP 전용 라운지와 고품격 서비스를 보장합니다.',
-    inclusions: ['스위트룸 3박', 'VIP 클럽 예약', '전용 가이드/기사', '풀케어 서비스'],
-    exclusions: ['주류 결제', '개인 유흥비'],
-    transport: '벤츠 S클래스 또는 리무진',
-    usageGuide: '성인 남성 전용',
-    refundPolicy: '보안상 별도 유선 문의',
-    durationDays: 5,
-    popularity: 99,
-    createdAt: '2024-03-15',
-    itinerary: [
-      { day: 1, title: 'VIP 의전', description: '공항 영접 및 체크인' },
-      { day: 2, title: '럭셔리 라운딩', description: '명문 골프장 프라이빗 라운딩' },
-      { day: 3, title: 'VIP 나이트', description: '최고급 핫플레이스 의전' },
-      { day: 4, title: '해장 코스 및 샌딩', description: '명품 보양식 후 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  },
-  {
-    id: '9',
-    category: 'GOLF',
-    title: '[3박 5일] 달랏 고원 쿨(Cool) 골프 투어',
-    location: 'Da Lat',
-    price: 820000,
-    image: 'https://images.unsplash.com/photo-1542662565-7e4b66bae529?q=80&w=1470&auto=format&fit=crop',
-    description: '베트남의 알프스 달랏에서 즐기는 시원한 골프! 평균 기온 20도의 최적 날씨입니다.',
-    inclusions: ['최고급 골프 리조트 3박', '라운딩 3회', '국내선 왕복', '전용 리무진'],
-    exclusions: ['캐디팁', '석식'],
-    transport: 'SUV 리무진',
-    usageGuide: '가벼운 외투 지참',
-    refundPolicy: '21일 전 100% 환불',
-    durationDays: 5,
-    popularity: 90,
-    createdAt: '2024-03-18',
-    itinerary: [
-      { day: 1, title: '달랏 도착', description: '공항 픽업 및 리조트 이동' },
-      { day: 2, title: '팰리스 CC 라운딩', description: '역사적인 명문 코스' },
-      { day: 3, title: 'SAM 투옌람 라운딩', description: '호수 배경의 환상적 코스' },
-      { day: 4, title: '시내 투어 및 샌딩', description: '야시장 구경 후 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  },
-  {
-    id: '10',
-    category: 'TOUR',
-    title: '[3박 5일] 베트남 중부의 보석, 판티엣 힐링 투어',
-    location: 'Phan Thiet',
-    price: 630000,
-    image: 'https://images.unsplash.com/photo-1520116468816-95b69f847357?q=80&w=1470&auto=format&fit=crop',
-    description: '새롭게 부상하는 핫플레이스 판티엣! 대규모 워터파크와 끝없는 해변 힐링 패키지입니다.',
-    inclusions: ['해변 리조트 3박', '테마파크 입장권', '전용 리무진', '조식 포함'],
-    exclusions: ['가이드 팁', '개인 비용'],
-    transport: '장거리용 리무진 버스',
-    usageGuide: '가족 단위 강력 추천',
-    refundPolicy: '14일 전 100% 환불',
-    durationDays: 5,
-    popularity: 88,
-    createdAt: '2024-03-20',
-    itinerary: [
-      { day: 1, title: '판티엣 이동', description: '해안 도로 리무진 여행' },
-      { day: 2, title: '리조트 힐링', description: '전용 비치 및 해양 스포츠' },
-      { day: 3, title: '노바월드 어드벤처', description: '대규모 테마파크 즐기기' },
-      { day: 4, title: '호치민 복귀 및 샌딩', description: '기념품 쇼핑 후 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  },
-  {
-    id: '12',
-    category: 'GOLF',
-    title: '[3박 5일] 호치민 시티 4색 메이저 골프 마스터즈',
-    location: 'Ho Chi Minh',
-    price: 980000,
-    image: 'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?q=80&w=1470&auto=format&fit=crop',
-    description: '매일 다른 4개의 명문 골프장에서 라운딩을 즐기는 진정한 골프 마니아를 위한 도전입니다.',
-    inclusions: ['5성급 골프 호텔 3박', '4색 라운딩(72홀)', '전용 리무진', '특식 제공'],
-    exclusions: ['항공권', '캐디팁', '개인 비용'],
-    transport: 'VIP 골프 전용 리무진',
-    usageGuide: '체력 소모가 큼으로 컨디션 조절 요망',
-    refundPolicy: '21일 전 100% 환불',
-    durationDays: 5,
-    popularity: 96,
-    createdAt: '2024-04-10',
-    itinerary: [
-      { day: 1, title: '도착 및 1차 라운딩', description: '공항 근처 탄손넛 CC 라운딩' },
-      { day: 2, title: '트윈도브스 라운딩', description: '명품 KLPGA 코스' },
-      { day: 3, title: '롱탄 CC 라운딩', description: '최고의 레이아웃 경험' },
-      { day: 4, title: '동나이 CC 및 출국', description: '마지막 라운딩 후 샌딩' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  },
-  {
-    id: '13',
-    category: 'HOTEL',
-    title: '[3박 5일] 붕따우 럭셔리 풀빌라 & 요트 투어',
-    location: 'Vung Tau',
-    price: 850000,
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1470&auto=format&fit=crop',
-    description: '프라이빗 풀빌라 스테이와 해질녘 럭셔리 요트 투어가 포함된 최고의 로맨틱 패키지입니다.',
-    inclusions: ['프라이빗 풀빌라 3박', '전용 요트 렌탈', '와인/카나페 제공', '공항 리무진'],
-    exclusions: ['개인 식비', '추가 액티비티'],
-    transport: '고급 세단/리무진',
-    usageGuide: '요트 투어 시 선글라스 필수',
-    refundPolicy: '15일 전 50% 환불',
-    durationDays: 5,
-    popularity: 94,
-    createdAt: '2024-04-12',
-    itinerary: [
-      { day: 1, title: '빌라 체크인', description: '붕따우 프라이빗 휴식' },
-      { day: 2, title: '요트 선셋 투어', description: '바다 위 샴페인 파티' },
-      { day: 3, title: '해변 자유 시간', description: '수상 레포츠 및 휴식' },
-      { day: 4, title: '카페 투어 및 샌딩', description: '인생샷 스팟 방문 후 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  },
-  {
-    id: '17',
-    category: 'FOR_MEN',
-    title: '[3박 5일] 호치민 나이트 라이프 클러빙 & 펍 크롤',
-    location: 'Ho Chi Minh',
-    price: 880000,
-    image: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=1470&auto=format&fit=crop',
-    description: '잠들지 않는 도시 호치민의 가장 뜨거운 밤! 최고급 클럽 VIP 테이블과 펍 투어를 즐기세요.',
-    inclusions: ['럭셔리 호텔 3박', '클럽 VIP 입장권', '보디가드 기사 대기', '숙취 해소 케어'],
-    exclusions: ['추가 양주 결제', '개인 유흥비'],
-    transport: '대형 리무진 상시 대기',
-    usageGuide: '드레스코드 준수 요망',
-    refundPolicy: '상세 규정 별도 안내',
-    durationDays: 5,
-    popularity: 97,
-    createdAt: '2024-04-20',
-    itinerary: [
-      { day: 1, title: '클러빙 시작', description: '부이비엔 여행자 거리 펍' },
-      { day: 2, title: 'VIP 클럽 나이트', description: '1군 메인 클럽 의전' },
-      { day: 3, title: '크래프트 비어 투어', description: '다양한 수제 맥주 탐방' },
-      { day: 4, title: '휴식 후 샌딩', description: '해장 코스 및 공항 이동' },
-      { day: 5, title: '인천 도착', description: '여행 종료' }
-    ]
-  }
-];
-
-export const MOCK_VIDEOS: VideoItem[] = [
-  { 
-    id: 'v1', 
-    title: 'TOUR MGM 호치민 홍보 영상 - 프리미엄 골프 투어', 
-    url: 'https://www.youtube.com/embed/S_8SNDjG9uI', 
-    category: 'BRAND',
-    thumbnail: 'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?q=80&w=800&auto=format&fit=crop'
-  },
-  { 
-    id: 'v2', 
-    title: '베트남 호치민 명문 골프 코스 트윈도브스 미리보기', 
-    url: 'https://www.youtube.com/embed/S_8SNDjG9uI', 
-    category: 'GOLF',
-    thumbnail: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?q=80&w=800&auto=format&fit=crop'
-  },
-  { 
-    id: 'v3', 
-    title: '호치민 풀빌라 & 숙소 현장 가이드', 
-    url: 'https://www.youtube.com/embed/S_8SNDjG9uI', 
-    category: 'HOTEL',
-    thumbnail: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=800&auto=format&fit=crop'
   }
 ];
 
@@ -421,14 +399,5 @@ export const MOCK_POSTS: Post[] = [
     date: '2024.03.21',
     category: 'QNA',
     likes: 3
-  },
-  {
-    id: 'p3',
-    title: '무이네 투어 갔다가 만난 일몰 인생샷 공유합니다.',
-    content: '지프투어 꼭 하세요 두 번 하세요! 화이트 샌드듄에서 본 일몰은 평생 못 잊을 것 같아요.',
-    author: '여행홀릭',
-    date: '2024.03.20',
-    category: 'REVIEW',
-    likes: 25
   }
 ];

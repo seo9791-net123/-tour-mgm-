@@ -5,10 +5,6 @@ import CategoryGrid from './components/CategoryGrid';
 import ProductCard from './components/ProductCard';
 import ProductDetail from './components/ProductDetail';
 import ProductListView from './components/ProductListView';
-import VideoSection from './components/VideoSection';
-import VideoGalleryView from './components/VideoGalleryView';
-import VideoPlayerModal from './components/VideoPlayerModal';
-import VideoWriteModal from './components/VideoWriteModal';
 import ProductWriteModal from './components/ProductWriteModal';
 import AuthModal from './components/AuthModal';
 import AIPlannerModal from './components/AIPlannerModal';
@@ -18,31 +14,44 @@ import BlogWriteModal from './components/BlogWriteModal';
 import CommunitySection from './components/CommunitySection';
 import CommunityListView from './components/CommunityListView';
 import PostWriteModal from './components/PostWriteModal';
-import { MOCK_PRODUCTS, MOCK_BLOGS, MOCK_VIDEOS, MOCK_POSTS, CATEGORIES } from './constants';
-import { CategoryType, Product, Blog, VideoItem, Post } from './types';
-import { ChevronRight, BookOpen, X, Sparkles, Wand2, PenLine, Settings2, Edit3, Trash2, PlusCircle, Youtube, MessageSquare, LayoutGrid } from 'lucide-react';
+import VideoSection from './components/VideoSection';
+import VideoWriteModal from './components/VideoWriteModal';
+import VideoPlayerModal from './components/VideoPlayerModal';
+import VideoGalleryView from './components/VideoGalleryView';
+import Footer from './components/Footer';
+import ChatRoom from './components/ChatRoom';
+import { MOCK_PRODUCTS, MOCK_BLOGS, MOCK_POSTS, CATEGORIES, MOCK_VIDEOS } from './constants';
+import { CategoryType, Product, Blog, Post, User, VideoItem } from './types';
+import { ChevronRight, BookOpen, X, Sparkles, Wand2, Settings2, PlusCircle, MessageSquare, LayoutGrid, MessageCircle, Lock, ArrowRight, LogOut, ShieldCheck } from 'lucide-react';
 
 const App: React.FC = () => {
+  // Authentication State
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [selectedVideo, setSelectedVideo] = useState<{title: string, url: string} | null>(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isAIPlannerOpen, setIsAIPlannerOpen] = useState(false);
   const [isBlogWriteOpen, setIsBlogWriteOpen] = useState(false);
-  const [isVideoWriteOpen, setIsVideoWriteOpen] = useState(false);
   const [isProductWriteOpen, setIsProductWriteOpen] = useState(false);
   const [isPostWriteOpen, setIsPostWriteOpen] = useState(false);
+  const [isVideoWriteOpen, setIsVideoWriteOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
-  const [editingVideo, setEditingVideo] = useState<VideoItem | null>(null);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
+  const [editingVideo, setEditingVideo] = useState<VideoItem | null>(null);
+  const [selectedVideoPlayer, setSelectedVideoPlayer] = useState<{title: string, url: string} | null>(null);
   
   const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
   const [blogs, setBlogs] = useState<Blog[]>(MOCK_BLOGS);
-  const [videos, setVideos] = useState<VideoItem[]>(MOCK_VIDEOS);
   const [posts, setPosts] = useState<Post[]>(MOCK_POSTS);
+  
+  // Initialized with MOCK_VIDEOS for testing
+  const [videos, setVideos] = useState<VideoItem[]>(MOCK_VIDEOS);
   
   const [visitorCount, setVisitorCount] = useState(1248);
   const [isAdminMode, setIsAdminMode] = useState(false);
@@ -77,12 +86,29 @@ const App: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const handleLogin = (user: User) => {
+    setCurrentUser(user);
+    setIsLoggedIn(true);
+    setIsAuthOpen(false);
+    // 관리자 계정일 경우 관리자 모드 자동 활성화
+    if (user.role === 'admin') {
+      setIsAdminMode(true);
+    } else {
+      setIsAdminMode(false);
+    }
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setIsLoggedIn(false);
+    setIsAdminMode(false);
+    setCurrentPage('home');
+    setIsChatOpen(false);
+    alert('정상적으로 로그아웃되었습니다.');
+  };
+
   const handleCategorySelect = (catId: CategoryType) => {
     const catData = CATEGORIES.find(c => c.id === catId);
-    if (catId === 'VIDEO') {
-      setCurrentPage('videos');
-      return;
-    }
     if (catData?.url) {
       setWebViewTitle(catData.label);
       setExternalUrl(catData.url);
@@ -117,7 +143,6 @@ const App: React.FC = () => {
     setSelectedProduct(null);
   };
 
-  // Product CRUD
   const handleSaveProduct = (productData: Omit<Product, 'id' | 'createdAt' | 'popularity'>) => {
     if (editingProduct) {
       setProducts(products.map(p => p.id === editingProduct.id ? { ...p, ...productData } : p));
@@ -140,7 +165,6 @@ const App: React.FC = () => {
     }
   };
 
-  // Blog CRUD
   const handleSaveBlog = (blogData: Omit<Blog, 'id'>) => {
     if (editingBlog) {
       setBlogs(blogs.map(b => b.id === editingBlog.id ? { ...blogData, id: b.id } : b));
@@ -151,18 +175,6 @@ const App: React.FC = () => {
     setEditingBlog(null);
   };
 
-  // Video CRUD
-  const handleSaveVideo = (videoData: Omit<VideoItem, 'id'>) => {
-    if (editingVideo) {
-      setVideos(videos.map(v => v.id === editingVideo.id ? { ...videoData, id: v.id } : v));
-    } else {
-      setVideos([{ ...videoData, id: `v${Date.now()}` }, ...videos]);
-    }
-    setIsVideoWriteOpen(false);
-    setEditingVideo(null);
-  };
-
-  // Post CRUD
   const handleSavePost = (postData: Omit<Post, 'id' | 'likes' | 'date'>) => {
     if (editingPost) {
       setPosts(posts.map(p => p.id === editingPost.id ? { ...p, ...postData } : p));
@@ -175,14 +187,36 @@ const App: React.FC = () => {
     setEditingPost(null);
   };
 
+  const handleSaveVideo = (videoData: Omit<VideoItem, 'id'>) => {
+    if (editingVideo) {
+      setVideos(videos.map(v => v.id === editingVideo.id ? { ...videoData, id: v.id } : v));
+    } else {
+      setVideos([{ ...videoData, id: `v${Date.now()}` }, ...videos]);
+    }
+    setIsVideoWriteOpen(false);
+    setEditingVideo(null);
+  };
+
+  const handleDeleteVideo = (id: string) => {
+    if (confirm('영상을 삭제하시겠습니까? 삭제된 영상은 복구할 수 없습니다.')) {
+      setVideos(prev => prev.filter(v => v.id !== id));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20 sm:pb-0 flex flex-col">
-      <Navbar onNav={resetToHome} onOpenAuth={() => setIsAuthOpen(true)} visitorCount={visitorCount} />
+      <Navbar 
+        onNav={resetToHome} 
+        onOpenAuth={() => setIsAuthOpen(true)} 
+        onLogout={handleLogout}
+        isLoggedIn={isLoggedIn}
+        currentUser={currentUser}
+        visitorCount={visitorCount} 
+      />
 
-      <main className={`flex-grow ${currentPage === 'webview' || currentPage === 'videos' || currentPage === 'community' || currentPage === 'products' ? 'overflow-hidden' : 'max-w-4xl mx-auto pb-12 w-full'}`}>
+      <main className={`flex-grow ${currentPage === 'webview' || currentPage === 'community' || currentPage === 'products' || currentPage === 'videos' ? 'overflow-hidden' : 'max-w-4xl mx-auto pb-12 w-full'}`}>
         {currentPage === 'home' && (
           <div className="animate-in fade-in duration-500 w-full">
-            {/* Hero Section */}
             <div className="relative h-72 sm:h-[450px] mx-4 mt-6 rounded-[40px] overflow-hidden shadow-2xl">
               {heroImages.map((img, idx) => (
                 <div key={idx} className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${currentHeroIndex === idx ? 'opacity-100' : 'opacity-0'}`}>
@@ -191,14 +225,37 @@ const App: React.FC = () => {
                 </div>
               ))}
               <div className="absolute inset-0 flex flex-col justify-center px-8 sm:px-12">
-                <span className="inline-block px-3 py-1 bg-emerald-500/30 backdrop-blur-md text-emerald-300 font-black tracking-widest text-[10px] sm:text-xs uppercase rounded-full mb-4 border border-emerald-400/20 w-fit">Premium Vietnam Experience</span>
-                <h2 className="text-3xl sm:text-6xl font-black text-white leading-[1.1] mb-6 drop-shadow-lg">베트남의 푸른 필드,<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-200">TOUR MGM</span>과 함께</h2>
+                <span className="inline-block px-3 py-1 bg-emerald-500/30 backdrop-blur-md text-emerald-300 font-black tracking-widest text-[10px] sm:text-xs uppercase rounded-full mb-4 border border-emerald-400/20 w-fit">Hello, {currentUser?.nickname || 'Guest'}!</span>
+                <h2 className="text-3xl sm:text-6xl font-black text-white leading-[1.1] mb-6 drop-shadow-lg">
+                  전문가가 설계한<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-200">빈틈없는 여정,</span><br />
+                  <span className="text-xl sm:text-3xl opacity-90 block mt-2">TOUR MGM 호치민 골프 패키지.</span>
+                </h2>
               </div>
             </div>
 
             <div className="px-4"><CategoryGrid onCategoryClick={handleCategorySelect} /></div>
 
-            {/* AI Planner Banner */}
+            {isAdminMode && (
+              <div className="mx-4 mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
+                    <ShieldCheck className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="text-emerald-900 font-black text-sm">관리자 권한 활성화됨</h4>
+                    <p className="text-emerald-600 text-xs font-bold">상품, 영상, 매거진 편집이 가능합니다.</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setIsAdminMode(false)}
+                  className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-black shadow-lg"
+                >
+                  임시 일반모드
+                </button>
+              </div>
+            )}
+
             <div className="px-4 mb-10">
               <button onClick={() => setIsAIPlannerOpen(true)} className="w-full relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-700 p-8 rounded-3xl shadow-lg group hover:shadow-emerald-200 transition-all text-left">
                 <div className="relative z-10">
@@ -214,7 +271,6 @@ const App: React.FC = () => {
               </button>
             </div>
 
-            {/* Featured Products Section */}
             <div className="px-4 mb-10">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
@@ -237,32 +293,23 @@ const App: React.FC = () => {
 
             <VideoSection 
               videos={videos} 
-              isAdmin={isAdminMode}
-              onVideoClick={setSelectedVideo}
-              onEditVideo={(v) => { setEditingVideo(v); setIsVideoWriteOpen(true); }}
-              onDeleteVideo={(id) => setVideos(videos.filter(v => v.id !== id))}
+              isAdmin={isAdminMode} 
+              visitorCount={visitorCount}
+              onVideoClick={setSelectedVideoPlayer}
               onSeeAll={() => setCurrentPage('videos')}
               onAddVideo={() => { setEditingVideo(null); setIsVideoWriteOpen(true); }}
+              onEditVideo={(v) => { setEditingVideo(v); setIsVideoWriteOpen(true); }}
+              onDeleteVideo={handleDeleteVideo}
             />
 
             <CommunitySection posts={posts} onSeeAll={() => setCurrentPage('community')} />
 
-            {/* Magazine Blogs Section */}
             <div className={`px-4 mt-8 py-8 rounded-[40px] transition-all ${isAdminMode ? 'bg-emerald-50/50' : ''}`}>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-emerald-600" />
                   MGM 여행 매거진
                 </h2>
-                <button 
-                  onClick={() => setIsAdminMode(!isAdminMode)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black transition-all shadow-sm ${
-                    isAdminMode ? 'bg-emerald-600 text-white' : 'bg-white text-gray-500 border border-gray-200'
-                  }`}
-                >
-                  <Settings2 className="w-4 h-4" />
-                  {isAdminMode ? '관리 종료' : '관리자 모드'}
-                </button>
               </div>
 
               {isAdminMode && (
@@ -296,6 +343,8 @@ const App: React.FC = () => {
                 ))}
               </div>
             </div>
+            
+            <Footer />
           </div>
         )}
 
@@ -312,21 +361,21 @@ const App: React.FC = () => {
           />
         )}
 
-        {currentPage === 'videos' && (
-          <VideoGalleryView 
-            videos={videos} isAdmin={isAdminMode} onClose={() => resetToHome()} 
-            onEditVideo={(v) => { setEditingVideo(v); setIsVideoWriteOpen(true); }}
-            onDeleteVideo={(id) => setVideos(videos.filter(v => v.id !== id))}
-            onAddVideo={() => { setEditingVideo(null); setIsVideoWriteOpen(true); }}
-          />
-        )}
-
         {currentPage === 'community' && (
           <CommunityListView 
             posts={posts} isAdmin={isAdminMode} onClose={() => resetToHome()} 
             onAddPost={() => { setEditingPost(null); setIsPostWriteOpen(true); }}
             onEditPost={(p) => { setEditingPost(p); setIsPostWriteOpen(true); }}
             onDeletePost={(id) => setPosts(posts.filter(p => p.id !== id))}
+          />
+        )}
+
+        {currentPage === 'videos' && (
+          <VideoGalleryView 
+            videos={videos} isAdmin={isAdminMode} onClose={() => resetToHome()} 
+            onAddVideo={() => { setEditingVideo(null); setIsVideoWriteOpen(true); }}
+            onEditVideo={(v) => { setEditingVideo(v); setIsVideoWriteOpen(true); }}
+            onDeleteVideo={handleDeleteVideo}
           />
         )}
 
@@ -346,22 +395,36 @@ const App: React.FC = () => {
 
       {/* Modals */}
       {selectedProduct && <ProductDetail product={selectedProduct} onClose={() => setSelectedProduct(null)} onConsultation={openKakaoModal} />}
-      {selectedVideo && <VideoPlayerModal video={selectedVideo} onClose={() => setSelectedVideo(null)} />}
-      {isAuthOpen && <AuthModal onClose={() => setIsAuthOpen(false)} />}
       {isAIPlannerOpen && <AIPlannerModal onClose={() => setIsAIPlannerOpen(false)} onConsultation={openKakaoModal} />}
       {isBlogWriteOpen && <BlogWriteModal editingBlog={editingBlog || undefined} onClose={() => setIsBlogWriteOpen(false)} onSave={handleSaveBlog} />}
-      {isVideoWriteOpen && <VideoWriteModal editingVideo={editingVideo || undefined} onClose={() => setIsVideoWriteOpen(false)} onSave={handleSaveVideo} />}
       {isProductWriteOpen && <ProductWriteModal editingProduct={editingProduct || undefined} onClose={() => setIsProductWriteOpen(false)} onSave={handleSaveProduct} />}
       {isPostWriteOpen && <PostWriteModal editingPost={editingPost || undefined} onClose={() => setIsPostWriteOpen(false)} onSave={handleSavePost} />}
+      {isVideoWriteOpen && <VideoWriteModal editingVideo={editingVideo || undefined} onClose={() => setIsVideoWriteOpen(false)} onSave={handleSaveVideo} />}
+      {selectedVideoPlayer && <VideoPlayerModal video={selectedVideoPlayer} onClose={() => setSelectedVideoPlayer(null)} />}
       {kakaoModalInfo.isOpen && <KakaoConsultationModal initialInquiry={kakaoModalInfo.initialMessage} onClose={() => setKakaoModalInfo({ isOpen: false })} onFinalSubmit={handleKakaoSubmit} />}
       {quotationData && <QuotationView data={quotationData} onClose={() => setQuotationData(null)} />}
+      {isAuthOpen && <AuthModal onClose={() => setIsAuthOpen(false)} onLogin={handleLogin} />}
+      
+      {isChatOpen && <ChatRoom onClose={() => setIsChatOpen(false)} userNickname={currentUser?.nickname || '손님'} />}
 
-      {/* Footer Navigation */}
+      <button 
+        onClick={() => setIsChatOpen(true)}
+        className="hidden sm:flex fixed bottom-6 right-6 w-16 h-16 bg-emerald-600 text-white rounded-full shadow-[0_10px_40px_rgba(16,185,129,0.4)] items-center justify-center hover:scale-110 active:scale-90 transition-all z-[90] group"
+      >
+        <div className="absolute -top-1 -right-1 px-2 py-0.5 bg-rose-500 text-white text-[8px] font-black rounded-full animate-bounce">LIVE</div>
+        <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+      </button>
+
       <div className="sm:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-xl border-t flex items-center justify-around px-6 z-40">
         <button onClick={() => resetToHome('home')} className={`flex flex-col items-center gap-1 ${currentPage === 'home' ? 'text-emerald-600' : 'text-gray-400'}`}><LayoutGrid className="w-5 h-5 mb-0.5" /><span className="text-[10px] font-bold">홈</span></button>
         <button onClick={() => setCurrentPage('community')} className={`flex flex-col items-center gap-1 ${currentPage === 'community' ? 'text-emerald-600' : 'text-gray-400'}`}><MessageSquare className="w-5 h-5 mb-0.5" /><span className="text-[10px] font-bold">게시판</span></button>
+        <button onClick={() => setIsChatOpen(true)} className={`flex flex-col items-center gap-1 ${isChatOpen ? 'text-emerald-600' : 'text-gray-400'}`}><MessageCircle className="w-5 h-5 mb-0.5" /><span className="text-[10px] font-bold">라운지</span></button>
         <button onClick={() => setIsAIPlannerOpen(true)} className={`flex flex-col items-center gap-1 text-gray-400`}><Sparkles className="w-5 h-5 mb-0.5" /><span className="text-[10px] font-bold">AI추천</span></button>
-        <button onClick={() => setIsAuthOpen(true)} className="flex flex-col items-center gap-1 text-gray-400"><span className="text-[10px] font-bold">MY</span></button>
+        {isLoggedIn ? (
+          <button onClick={handleLogout} className="flex flex-col items-center gap-1 text-gray-400"><LogOut className="w-5 h-5 mb-0.5" /><span className="text-[10px] font-bold">로그아웃</span></button>
+        ) : (
+          <button onClick={() => setIsAuthOpen(true)} className="flex flex-col items-center gap-1 text-gray-400"><ArrowRight className="w-5 h-5 mb-0.5" /><span className="text-[10px] font-bold">로그인</span></button>
+        )}
       </div>
     </div>
   );
